@@ -1,0 +1,147 @@
+from random import randint
+print('\033[95m'+'Введите N:'+'\033[0m', end=' ')
+n = int(int(input()))
+print('\033[95m'+'Введите K:'+'\033[0m', end=' ')
+k = int(int(input()))
+a = []
+F = []
+At  = []
+Ft  = []
+Pr = []
+p=0
+q = 1
+m = 0
+s = 0
+v = 0
+for i in range(n):
+    F.append([0]*n)
+    At.append([0]*n)
+    Ft.append([0]*n)
+    Pr.append([0] * n)
+print('\033[95m'+'Основная матрица'+'\033[0m')
+for i in range(len(F)):
+    for j in range(len(F)):
+        F[i][j] = randint(-10,10)
+        print("{:4d}".format(F[i][j]), end = "")
+    print()
+print()
+A = F
+if (n//2) % 2 != 0:
+#------------------------Поиск нулей во 2 области-----------------------------
+    for i in range(0,(n//4)+1):
+        for j in range(n//2,n):
+            if i == j-(n//2):
+                if F[i][j] == 0:
+                    p += 1
+    for i in range(0, (n // 4)):
+        for j in range(n // 2, n):
+            if i == ((n//2)-(j - (n // 2)+1)):
+                if F[i][j] == 0:
+                    p += 1
+    for j in range((n // 2+1), n-1):
+            if F[0][j] == 0:
+                p += 1
+#------------------------Произведение в 4 области-------------------------------
+    for i in range((n//4)+1,n//2):
+        for j in range(n//2,n):
+            if i == j-(n//2):
+                q = q * F[i][j]
+    for i in range((n // 4),n//2):
+        for j in range(n // 2, n):
+            if i == ((n//2)-(j - (n // 2)+1)):
+                q = q * F[i][j]
+    for j in range((n // 2+1), n-1):
+        q = q * F[i][j]
+    m = 1
+else:
+# ------------------------Поиск нулей во 2 области-----------------------------
+    for i in range(0,(n//4)):
+        for j in range(n//2,n):
+            if i == j-(n//2):
+                if F[i][j] == 0:
+                    p += 1
+    for i in range(0, (n // 4)):
+        for j in range(n // 2, n):
+            if i == ((n//2)-(j - (n // 2)+1)):
+                if F[i][j] == 0:
+                    p += 1
+    for j in range((n // 2+1), n-1):
+            if F[0][j] == 0:
+                p += 1
+#------------------------Произведение в 4 области-------------------------------
+    for i in range((n//4),n//2):
+        for j in range(n//2,n):
+            if i == j-(n//2):
+                q = q * F[i][j]
+    for i in range((n // 4),n//2):
+        for j in range(n // 2, n):
+            if i == ((n//2)-(j - (n // 2)+1)):
+                q = q * F[i][j]
+    for j in range((n // 2+1), n-1):
+        q = q * F[i][j]
+print('\033[095m'+'Преобразованная матрица'+'\033[0m')
+if q > p:
+    for i in range(0,n//2):
+        for j in range(0, n//2):
+            if i >= j:
+                F[i][j],F[n-j-1][n-i-1] = F[n-j-1][n-i-1],F[i][j]
+    for i in range(n//2,n):
+        for j in range(0,n//2):
+            if i <= ((n//2) - (j - (n//4+m))+1):
+                F[i][j], F[n - j - 1][n - i - 1] = F[n - j - 1][n - i - 1], F[i][j]
+    for i in range(len(F)):
+        for j in range(len(F)):
+            print("{:4d}".format(F[i][j]), end="")
+        print()
+    print()
+elif q < p:
+    for i in range(0,n//2):
+        for j in range(0,n//2):
+            F[i][j], F[i][j + n//2] = F[i][j + n//2], F[i][j]
+    for i in range(len(F)):
+        for j in range(len(F)):
+            print("{:4d}".format(F[i][j]), end="")
+        print()
+    print()
+elif q == p:
+    print("Количество нулей и произведение равны")
+print('\033[95m'+"A транспонированная * K"+'\033[0m')
+for i in range(len(F)):
+    for j in range(len(F)):
+        At[i][j] =  k *A[i][j]
+        print("{:4d}".format(At[i][j]), end="")
+    print()
+print()
+print('\033[95m'"F + А"+'\033[0m')
+for i in range(len(F)):
+    for j in range(len(F)):
+        A[i][j] = A[i][j] + F[i][j]
+        print("{:4d}".format(A[i][j]), end="")
+    print()
+print()
+print('\033[95m'+"F транспонированная * K"+'\033[0m')
+for i in range(len(F)):
+    for j in range(len(F)):
+        Ft[i][j] = F[j][i]
+        print("{:4d}".format(A[i][j]), end="")
+    print()
+print()
+for o in range(n):
+    for f in range(n):
+        for l in range(n):
+            s = s + (At[o][l] * A[l][f])
+        Pr[o][f] = s
+        s = 0
+print('\033[95m'+"(К*Aт)*(F+А)"+'\033[0m')
+for i in range(len(F)):
+    for j in range(len(F)):
+        print("{:4d}".format(Pr[i][j]), end="")
+    print()
+print()
+print('\033[95m'+"(К*Aт)*(F+А)- K* Fт "+'\033[0m')
+for i in range(len(F)):
+    for j in range(len(F)):
+        Pr[i][j] = Pr[i][j] - Ft[i][j]
+        print("{:4d}".format(Pr[i][j]), end="")
+    print()
+print()
